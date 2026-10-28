@@ -1,0 +1,133 @@
+*SQL Constraint Questions*
+
+
+*PRIMARY KEY*
+1.Create a table students with a primary key on student_id.
+
+create table students (
+	stud_id int primary key,
+	stud_name varchar(50)
+);
+
+2.Insert two rows with the same student_id — what happens?
+
+insert into students values 
+(1, 'Vignesh'),
+(1, 'Saran')
+
+ERROR:  duplicate key value violates unique constraint "students_pkey"
+Key (stud_id)=(1) already exists. 
+
+3.Can a table have more than one primary key column?
+No, A table can have only one primary key column
+
+
+*FOREIGN KEY*
+4.Create a table orders with a foreign key referencing customers(customer_id).
+
+create table orders (
+	order_id int primary key,
+	product varchar(50),
+	cust_id int,
+	foreign key (cust_id)
+		references customers(cust_id)
+);
+
+5.Try inserting an order with a customer_id that doesn’t exist — what happens?
+
+insert into customers values
+(1, 'Siva'),
+(2, 'Chandru')
+
+insert into orders values
+(101, 'Mobile', 3)
+
+ERROR:  insert or update on table "orders" violates foreign key constraint "orders_cust_id_fkey"
+Key (cust_id)=(3) is not present in table "customers".
+
+6.What is the difference between ON DELETE CASCADE and ON DELETE SET NULL in foreign keys?
+
+ON DELETE CASCADE : When a customer is deleted, all orders belonging to that customer are automatically deleted.
+
+ON DELETE SET NULL : When a customer is deleted, the customer's orders remain, but their customer_id is changed to NULL.
+
+*UNIQUE*
+7.Create a table users with a unique constraint on email.
+
+create table users (
+	user_id int primary key,
+	email varchar(50) unique
+)
+
+8.Insert two users with the same email — what happens?
+
+insert into users values
+(1, 'vignesh@gmail.com'),
+(2, 'vignesh@gmail.com')
+
+ERROR:  duplicate key value violates unique constraint "users_email_key"
+Key (email)=(vignesh@gmail.com) already exists.
+
+9.Can a table have multiple unique constraints?
+
+Yes, a table can have multiple unique constraints
+
+
+*NOT NULL*
+10.Create a table products with a name column defined as NOT NULL.
+
+create table products (
+	prod_id int primary key,
+	prod_name varchar(50) not null
+)
+
+11.Try inserting a product without a name — what happens?
+
+insert into products values
+	(1, 'Laptop'),
+	(2, ''),
+	(3)
+
+ERROR:  null value in column "prod_name" of relation "products" violates not-null constraint
+Failing row contains (3, null).
+
+*CHECK*
+12.Create a table employees with a check constraint that salary > 0.
+
+create table employees (
+	emp_id int primary key,
+	dept varchar(20),
+	salary int check (salary > 0)
+)
+
+13.Try inserting an employee with a negative salary — what happens?
+
+insert into employees values
+(1, 'IT', -20000)
+
+ERROR:  new row for relation "employees" violates check constraint "employees_salary_check"
+Failing row contains (1, IT, -20000).
+
+14.Write a check constraint that ensures age >= 18.
+
+alter table employees
+add column age int check (age >= 18)
+
+
+*DEFAULT*
+15.Create a table accounts with a default value of status = 'ACTIVE'.
+
+create table accounts (
+	acc_id int primary key,
+	status varchar default 'ACTIVE'
+)
+
+
+16.Insert a row without specifying status — what value is stored?
+
+insert into accounts values
+(1)
+
+select * from accounts
+
+1	"ACTIVE"
