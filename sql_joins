@@ -1,0 +1,237 @@
+create table institute (
+	branch_id int primary key,
+	branch_name varchar(50) not null
+);
+
+create table course (
+	course_id int primary key,
+	course_name varchar(50) not null
+);
+
+create table course_data (
+	course_id int primary key,
+	course_name varchar(50) not null
+)
+
+create table student_data (
+	student_id int primary key,
+	student_name varchar(50) not null,
+	course_id int,
+	branch_id int
+);
+
+insert into institute (branch_id, branch_name)
+values
+(1, 'Salem'),
+(2, 'Chennai'),
+(3, 'Bengaluru'),
+(4, 'Coimbatore'),
+(5, 'Madurai');
+
+insert into course (course_id, course_name)
+values
+(101, 'Python'),
+(102, 'Java'),
+(103, 'React.js'),
+(104, 'SQL'),
+(105, 'Data Analytics'),
+(106, 'Cloud Computing');
+
+insert into course_data (course_id, course_name)
+values
+(101, 'Python'),
+(102, 'Java'),
+(103, 'React.js'),
+(104, 'SQL'),
+(105, 'Data Analytics');
+
+insert into student_data
+    (student_id, student_name, course_id, branch_id)
+values
+(1, 'Kumar', 101, 1),
+(2, 'Priya', 103, 2),
+(3, 'Arun', 102, 1),
+(4, 'Kavya', 104, 3),
+(5, 'Karthik', 103, 4),
+(6, 'Divya', 105, 2),
+(7, 'Ravi', NULL, 3),
+(8, 'Meena', 110, 4),
+(9, 'Suresh', 101, 5),
+(10, 'Keerthana', 120, 1),
+(11, 'Vijay', NULL, 2),
+(12, 'Anitha', 102, 3);
+
+--Inner joins
+select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id;
+
+select s.student_id, s.student_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+
+Select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id;
+
+select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+where student_name = 'Kumar';
+
+select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+where course_name = 'React.js'
+
+select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+
+select count(s.student_id) as enrolled_students
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+
+--left join
+select s.student_id, s.student_name, c.course_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+
+select s.student_id, s.student_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+where c.course_id is null 
+
+select s.student_id, s.student_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+where c.course_id is null
+
+select s.student_name, c.course_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+
+select s.student_id, s.student_name, c.course_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+where c.course_id is null and s.course_id is not null
+
+select s.student_id, s.student_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+where c.course_id is null
+
+select s.student_id, s.student_name, c.course_id, c.course_name
+from student_data s
+left join course_data c
+on s.course_id = c.course_id
+
+--right join
+
+select c.course_id, c.course_name
+from student_data s
+right join course_data c
+on s.course_id = c.course_id
+
+select c.course_id, c.course_name
+from student_data s
+right join course c
+on s.course_id = c.course_id
+where s.course_id is null
+
+select s.student_name, c.course_id, c.course_name
+from student_data s
+right join course c
+on s.course_id = c.course_id
+where s.student_name is null
+
+select s.student_name, c.course_id, c.course_name
+from student_data s
+right join course c
+on s.course_id = c.course_id
+
+select c.course_id, c.course_name
+from student_data s
+right join course c
+on s.course_id = c.course_id
+where s.student_id is null
+
+select c.course_id, c.course_name
+from student_data s
+right join course c
+on s.course_id = c.course_id
+where s.course_id is null
+
+--full join
+
+select s.student_id, s.student_name, c.course_id, c.course_name
+from student_data s
+full join course c
+on s.course_id = c.course_id
+
+select s.student_id, s.student_name, c.course_id, c.course_name
+from student_data s
+full join course c
+on s.course_id = c.course_id
+where s.course_id is null or c.course_id is null
+
+--cross join
+
+select i.branch_id, i.branch_name, c.course_id, c.course_name
+from institute i
+cross join course_data c
+
+select i.branch_name, c.course_name
+from institute i
+cross join course_data c
+
+select count(*) as total_records
+from institute i
+cross join course_data c
+
+--bonus tasks
+
+select c.course_id, c.course_name, count(student_id) as total_students
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+group by c.course_id
+
+select c.course_id, c.course_name, count(student_id) as total_students
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+group by c.course_id
+having count(s.student_id) = (
+	select count(student_id) as total_students
+	from student_data s
+	join course_data c
+	on s.course_id = c.course_id
+	group by c.course_id
+	order by total_students desc
+	limit 1
+)
+
+select s.student_id, upper(s.student_name), c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id;
+
+select s.student_id, s.student_name, c.course_name
+from student_data s
+join course_data c
+on s.course_id = c.course_id
+where s.student_name like 'K%';
